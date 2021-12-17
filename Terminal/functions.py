@@ -1,5 +1,8 @@
 # --------------- headers --------------- #
+from os import system
 from utils import *
+import datetime
+import pywhatkit
 
 
 # --------------- Functions engine_of_voice --------------- #
@@ -23,6 +26,7 @@ def engine_of_voice_en(text):
 def listen():
     try:
         with SR.Microphone() as source:
+            system('cls')
             print(""" - - - SELECT A LENGUAGE - - - 
             + SPANISH
             + ENGLISH""")
@@ -36,11 +40,11 @@ def listen():
                         print(listening[0])
                         voice = listener.listen(source)
                         recognizer = listener.recognize_google(voice)
-                        recognizer = recognizer.lower()
-                        if 'alexa' in recognizer:
-                            engine_of_voice_sp(recognizer)    
+                        recognizer = recognizer.lower()    
                 except:
                     print(repeat[0])
+                    engine_of_voice_sp(repeat[0])
+                    listen()
 
                 return recognizer
 
@@ -50,26 +54,61 @@ def listen():
                         print(listening[1])
                         voice = listener.listen(source)
                         recognizer = listener.recognize_google(voice)
-                        recognizer = recognizer.lower()
-                        if 'alexa' in recognizer:
-                            engine_of_voice_en(recognizer)    
+                        recognizer = recognizer.lower()    
                 except:
                     print(repeat[1])
+                    engine_of_voice_en(repeat[1])
+                    listen()
 
                 return recognizer
     except:
-        pass
+        print(repeat[1])
+        engine_of_voice_en(repeat[1])
+        listen()
         
     
 # --------------- Function action --------------- #
 def action():
     recognizer = listen()
 
+    # --------------- Play on Youtube --------------- #
     if 'reproduce' in recognizer:
+        new = recognizer.replace('alexa reproduce', '')
+        engine_of_voice_sp(list_actions[0]+new)
+        pywhatkit.playonyt(new)
         print(playing[0])
     
-    if 'play' in recognizer:
+    elif 'play' in recognizer:
+        new = recognizer.replace('alexa play', '')
+        engine_of_voice_en(list_actions[1]+new)
+        pywhatkit.playonyt(new)
         print(playing[1])
+        
+    # --------------- Search on Google --------------- #
+    
+
+    # --------------- Time --------------- #
+    if 'tiempo' in recognizer:
+        new = datetime.datetime.now().strftime('%H:%M %p')
+        print("SON LAS" + new)
+        engine_of_voice_sp("SON LAS" + new)
+    
+    elif 'time' in recognizer:
+        new = datetime.datetime.now().strftime('%H:%M %p')
+        print("IT'S" + new)
+        engine_of_voice_en("IT'S" + new)
+
+    # --------------- Date --------------- #
+    if 'calendario' in recognizer:
+        new = datetime.datetime.now().strftime('%Y:%M:%D')
+        print("ESTAMOS A" + new)
+        engine_of_voice_sp("ESTAMOS A" + new)
+    
+    elif 'date' in recognizer:
+        new = datetime.datetime.now().strftime('%Y:%M:%D')
+        print("ESTAMOS A" + new)
+        engine_of_voice_en("ESTAMOS A" + new)
+    
 
 
 # --------------- main --------------- #
