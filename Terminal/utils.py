@@ -9,12 +9,29 @@ voices = engine.getProperty('voices')
 
 # --------------- varibles of listening--------------- #
 listener = SR.Recognizer()
-listening = ["ESCUCHANDO...", "LISTENING..."]
-repeat = ["REPITE PORFAVOR...","REPEAT PLEASE..."]
-playing = ["REPRODUCIENDO...", "PLAYING..."]
+listening = ["ESCUCHANDO...",
+             "LISTENING..."]
+
+repeat = ["REPITE PORFAVOR...",
+          "REPEAT PLEASE..."]
+
+playing = ["REPRODUCIENDO...",
+           "PLAYING..."]
+
+searching = ["BUSCANDO...",
+             "SEARCHING..."]
+
+wiki = ["HABLANDO...",
+        "TALKING..."]
+
 IA = "alexa"
 
 # --------------- varibles of action--------------- #
-action = ["COMANDO INVALIDO...", "INVALID COMMAND..."]
-list_actions = ["reproduciendo", "playing"]
+invalid = ["COMANDO INVALIDO...",
+          "INVALID COMMAND..."]
+
+list_actions = ["reproduciendo",
+                "playing",
+                "buscando",
+                "searching"]
 

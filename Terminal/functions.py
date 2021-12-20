@@ -3,7 +3,7 @@ from os import system
 from utils import *
 import datetime
 import pywhatkit
-
+import wikipedia
 
 # --------------- Functions engine_of_voice --------------- #
 # Voices
@@ -44,7 +44,6 @@ def listen():
                 except:
                     print(repeat[0])
                     engine_of_voice_sp(repeat[0])
-                    listen()
 
                 return recognizer
 
@@ -58,60 +57,90 @@ def listen():
                 except:
                     print(repeat[1])
                     engine_of_voice_en(repeat[1])
-                    listen()
 
                 return recognizer
+
+            else:
+                engine_of_voice_en(invalid[1])
+                print(repeat[1])
+                engine_of_voice_en(repeat[1])
+                listen()    
     except:
-        print(repeat[1])
-        engine_of_voice_en(repeat[1])
         listen()
-        
+
     
 # --------------- Function action --------------- #
 def action():
     recognizer = listen()
-
-    # --------------- Play on Youtube --------------- #
-    if 'reproduce' in recognizer:
-        new = recognizer.replace('alexa reproduce', '')
-        engine_of_voice_sp(list_actions[0]+new)
-        pywhatkit.playonyt(new)
-        print(playing[0])
-    
-    elif 'play' in recognizer:
-        new = recognizer.replace('alexa play', '')
-        engine_of_voice_en(list_actions[1]+new)
-        pywhatkit.playonyt(new)
-        print(playing[1])
+    while True:
+        # --------------- Play on Youtube --------------- #
+        if 'reproduce' in recognizer:
+            new = recognizer.replace('alexa reproduce', '')
+            engine_of_voice_sp(list_actions[0]+new)
+            pywhatkit.playonyt(new)
+            print(playing[0])
         
-    # --------------- Search on Google --------------- #
-    
+        elif 'play' in recognizer:
+            new = recognizer.replace('alexa play', '')
+            engine_of_voice_en(list_actions[1]+new)
+            pywhatkit.playonyt(new)
+            print(playing[1])
+            
+        # --------------- Search on Google --------------- #
+        elif 'busca' in recognizer:
+            new = recognizer.replace('alexa busca', '')
+            engine_of_voice_sp(list_actions[2]+new)
+            pywhatkit.search(new)
+            print(searching[0])
+        elif 'search' in recognizer:
+            new = recognizer.replace('alexa search', '')
+            engine_of_voice_en(list_actions[3]+new)
+            pywhatkit.search(new)
+            print(searching[1])
+            
+        # --------------- Search on Wikipedia --------------- #
+        elif 'wikipedia' in recognizer:
+            new = recognizer.replace('alexa wikipedia', '')
+            engine_of_voice_sp(new)
+            info = wikipedia.summary(new, 1)
+            print(wiki[0])
+            engine_of_voice_sp(info)
+        elif 'what is' in recognizer:
+            new = recognizer.replace('alexa what is', '')
+            engine_of_voice_en(new)
+            info = wikipedia.summary(new, 1)
+            print(wiki[1])
+            engine_of_voice_en(info)
 
-    # --------------- Time --------------- #
-    if 'tiempo' in recognizer:
-        new = datetime.datetime.now().strftime('%H:%M %p')
-        print("SON LAS" + new)
-        engine_of_voice_sp("SON LAS" + new)
-    
-    elif 'time' in recognizer:
-        new = datetime.datetime.now().strftime('%H:%M %p')
-        print("IT'S" + new)
-        engine_of_voice_en("IT'S" + new)
+        # --------------- Time --------------- #
+        elif 'tiempo' in recognizer:
+            new = datetime.datetime.now().strftime('%H:%M %p')
+            print("SON LAS" + new)
+            engine_of_voice_sp("SON LAS" + new)
+        
+        elif 'time' in recognizer:
+            new = datetime.datetime.now().strftime('%H:%M %p')
+            print("IT'S" + new)
+            engine_of_voice_en("IT'S" + new)
 
-    # --------------- Date --------------- #
-    if 'calendario' in recognizer:
-        new = datetime.datetime.now().strftime('%Y:%M:%D')
-        print("ESTAMOS A" + new)
-        engine_of_voice_sp("ESTAMOS A" + new)
-    
-    elif 'date' in recognizer:
-        new = datetime.datetime.now().strftime('%Y:%M:%D')
-        print("ESTAMOS A" + new)
-        engine_of_voice_en("ESTAMOS A" + new)
-    
+        # --------------- Date --------------- #
+        elif 'calendario' in recognizer:
+            new = datetime.datetime.now().strftime('%Y:%M:%D')
+            print("ESTAMOS A" + new)
+            engine_of_voice_sp("ESTAMOS A" + new)
+        
+        elif 'date' in recognizer:
+            new = datetime.datetime.now().strftime('%Y:%M:%D')
+            print("ESTAMOS A" + new)
+            engine_of_voice_en("ESTAMOS A" + new)
+
+        else:
+            engine_of_voice_en(invalid[1])
+            print(repeat[1])
+            engine_of_voice_en(repeat[1])
+            action() 
 
 
 # --------------- main --------------- #
 def main():
     action()
-    
